@@ -1,19 +1,17 @@
 services:
   backend:
-    build:
-      context: ./
-      dockerfile: Dockerfile
+    image: ${BACKEND_IMAGE:-bluemetti/finances-backend:1.0.1}
     environment:
       POSTGRES_HOST: database
-      POSTGRES_PORT: ${POSTGRES_PORT}
-      POSTGRES_DATABASE: ${POSTGRES_DATABASE}
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_CREATE_DROP: ${POSTGRES_CREATE_DROP}
-      SECRET_KEY: ${SECRET_KEY}
-      JWT_EXPIRATION_TIME: ${JWT_EXPIRATION_TIME}
-      CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS}
-      SWAGGER_ENABLED: ${SWAGGER_ENABLED}
+      POSTGRES_PORT: ${POSTGRES_PORT:-5432}
+      POSTGRES_DATABASE: ${POSTGRES_DATABASE:-finances}
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_CREATE_DROP: ${POSTGRES_CREATE_DROP:-update}
+      SECRET_KEY: ${SECRET_KEY:-K5hAhjzVhtGEy8ner4ASQZ7tPC32XxbC2z93hRktUx8=}
+      JWT_EXPIRATION_TIME: ${JWT_EXPIRATION_TIME:-3600000}
+      CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS:-http://localhost:4200}
+      SWAGGER_ENABLED: ${SWAGGER_ENABLED:-false}
     ports:
       - "8080:8080"
     depends_on:
@@ -23,11 +21,11 @@ services:
     image: postgres:16.3
     restart: always
     environment:
-      POSTGRES_DB: ${POSTGRES_DATABASE}
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DATABASE:-finances}
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
     ports:
-      - "${POSTGRES_PORT}:5432"
+      - "${POSTGRES_PORT:-5432}:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
 
